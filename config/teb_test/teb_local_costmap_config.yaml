@@ -1,0 +1,18 @@
+local_costmap:
+    transform_tolerance: 1.0
+    update_frequency: 3.0
+    publish_frequency: 3.0
+    global_frame: leo_bot/odom
+    rolling_window: true
+    resolution: 0.1
+    footprint: [[-0.1575,-0.2875],[-0.1575,0.2875],[0.4375,0.2875],[0.4375,-0.2875]]
+    footprint_padding: 0.0
+
+    width: 10.0
+    height: 10.0 
+    origin_x: -10.0
+    origin_y: -10.0
+    
+    plugins:
+      - {name: obstacles,  type: "costmap_2d::VoxelLayer" }
+      - {name: virtual_walls_map, type: "costmap_2d::StaticLayer" }

@@ -1,0 +1,7 @@
+image: /home/leo/robot_ws/src/leo_robot/maps/12_07_3.pgm
+resolution: 0.050000
+origin: [-20.913703, -9.443746, 0.000000]
+negate: 0
+occupied_thresh: 0.65
+free_thresh: 0.196
+

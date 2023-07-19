@@ -1,0 +1,4 @@
+float64 battery_percentage
+string driver_status
+string head_pose
+string is_charging

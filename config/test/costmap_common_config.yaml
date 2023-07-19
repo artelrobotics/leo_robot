@@ -1,0 +1,71 @@
+robot_base_frame: leo_bot/base_footprint
+transform_tolerance: 0.4
+update_frequency: 10.0
+publish_frequency: 2.0
+# obstacle_range: 6.0
+publish_voxel_map: true
+navigation_map:
+   map_topic: /leo_bot/map
+obstacles:
+  observation_sources:  b_scan_marking b_scan_clearing f_scan_marking f_scan_clearing
+  b_scan_marking: {
+    sensor_frame: leo_bot/back_lidar, 
+    data_type: LaserScan, 
+    topic: /leo_bot/back_lidar/scan_filtered, 
+    marking: true, 
+    clearing: false, 
+    expected_update_rate: 0.0, 
+    observation_persistence: 0.0, 
+    min_obstacle_height: -2.0, 
+    max_obstacle_height: 2.0, 
+    obstacle_range: 5.0,
+    raytrace_range: 6.5,
+    inf_is_valid: true,
+    track_unknown_space: false}
+    
+  b_scan_clearing:
+    {sensor_frame: leo_bot/back_lidar, 
+    data_type: LaserScan, 
+    topic: /leo_bot/back_lidar/scan_filtered, 
+    marking: false, 
+    clearing: true, 
+    expected_update_rate: 0.0, 
+    observation_persistence: 0.0, 
+    min_obstacle_height: -2.0, 
+    max_obstacle_height: 2.0, 
+    obstacle_range: 5.0,
+    raytrace_range: 6.5,
+    inf_is_valid: true,
+    track_unknown_space: false}
+  f_scan_marking:
+    {sensor_frame: leo_bot/front_lidar, 
+    data_type: LaserScan, 
+    topic: /leo_bot/front_lidar/scan_filtered, 
+    marking: true, 
+    clearing: false, 
+    expected_update_rate: 0.0, 
+    observation_persistence: 0.0, 
+    min_obstacle_height: -2.0, 
+    max_obstacle_height: 2.0, 
+    obstacle_range: 5.0,
+    raytrace_range: 6.5,
+    inf_is_valid: true,
+    track_unknown_space: false}
+  f_scan_clearing:
+    {sensor_frame: leo_bot/front_lidar, 
+    data_type: LaserScan, 
+    topic: /leo_bot/front_lidar/scan_filtered, 
+    marking: false, 
+    clearing: true, 
+    expected_update_rate: 0.0, 
+    observation_persistence: 0.0, 
+    min_obstacle_height: -2.0, 
+    max_obstacle_height: 2.0,
+    obstacle_range: 5.0,
+    raytrace_range: 6.5, 
+    inf_is_valid: true,
+    track_unknown_space: false}
+
+virtual_walls_map:
+  map_topic: /leo_bot/virtual_map
+  use_maximum: true

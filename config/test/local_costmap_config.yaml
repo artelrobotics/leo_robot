@@ -1,0 +1,17 @@
+local_costmap:
+    global_frame: leo_bot/odom
+    rolling_window: true
+    resolution: 0.1
+    z_resolution: 0.15
+    z_voxels: 8
+    inflation:
+      cost_scaling_factor: 3.0 #2.58 #30.0   # Exponential rate at which the obstacle cost drops off (default: 10). Must be chosen so that the cost value is > 0 at robot's circumscribed radius.
+      inflation_radius: 0.8 #0.6 #1.75   #0.8  # Max. distance from an obstacle at which costs are incurred for planning paths. Must be > robot's circumscribed radius.
+    width: 12.0 #10.0
+    height: 12.0 #10
+    origin_x: 0.0
+    origin_y: -3.0
+    
+    plugins:
+      - {name: obstacles,  type: "costmap_2d::ObstacleLayer" }
+      - {name: inflation,  type: "costmap_2d::InflationLayer" }

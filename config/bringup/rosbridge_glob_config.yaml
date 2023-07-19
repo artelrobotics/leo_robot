@@ -1,0 +1,3 @@
+topics_glob: "[*]"  # "" nothing, "[/rosout, etc]" specified, "[*]" all
+services_glob: "[*]" # "" nothing, "[/rosout, etc]" specified, "[*]" all
+params_glob: "" # "" nothing, "[/rosout, etc]" specified, "[*]" all

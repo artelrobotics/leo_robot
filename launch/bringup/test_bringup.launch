@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="robot_name"            default="$(env ROBOT_NAME)" />
+    <arg name="base_frame"            default="base_footprint" />
+    <arg name="odom_frame"            default="odom"/>
+    <arg name="output"                default="screen" />
+    <arg name="ws_port"               default="9090"/>
+    
+    <!-- Robot Description -->
+    <param name="use_gui" value="false" />
+    <param name="robot_description" command="$(find xacro)/xacro '$(find leo_urdf)/urdf/leo.urdf.xacro'  robot_model:=$(arg robot_name) 
+    base_frame:=$(arg base_frame)"/>
+
+    <!-- Joint State -->
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" respawn="true" output="$(arg output)"/>
+    <!-- Robot State  -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="$(arg output)"/>
+
+    
+    <!-- Odrive motor driver and Daly bms-->
+    <include file="$(find leo_robot)/launch/bringup/drivers.launch">
+        <arg name="robot_name"              value="$(arg robot_name)" />
+        <arg name="base_frame"              value="$(arg base_frame)" />
+        <arg name="odom_frame"              value="$(arg odom_frame)"/>
+        <arg name="output"                  value="$(arg output)" />
+        <arg name="publish_tf"              value="false" /> 
+    </include>
+    
+    <!-- Arduino Head -->
+    <node name="head"  pkg="rosserial_arduino" type="serial_node.py" output="$(arg output)" required='true'>
+        <param name="port"            value="/dev/ttyHeadNano"/>
+        <param name="baud"            value="57600"/>
+        <param name="auto_reset_timeout" value="1000000000"/>
+        <param name="reset_on_start" value="false"/>
+    </node>
+    
+    <!-- Rplidar lidars launch -->
+    <include file="$(find leo_robot)/launch/bringup/lidars.launch">
+        <arg name="robot_name"              value="$(arg robot_name)" />
+        <arg name="base_frame"              value="$(arg base_frame)" />
+        <arg name="output"                  value="$(arg output)" />
+        <arg name="pub_joints"              value="false" />
+        <arg name="front_lidar_frame"       value="leo_bot/front_lidar" />
+        <arg name="back_lidar_frame"        value="leo_bot/back_lidar" />
+    </include>
+
+    <!-- Intel Realsense D455 camera -->
+    <include file="$(find leo_robot)/launch/bringup/d455_camera.launch">
+        <arg name="robot_name"              value="$(arg robot_name)" />
+        <arg name="base_frame"              value="$(arg base_frame)" />
+        <arg name="output"                  value="$(arg output)" />
+        <arg name="pub_joints"              value="false" />
+        <arg name="camera_type"             value="d455_camera"/>
+        <arg name="depth_width"             value="640"/>
+        <arg name="depth_height"            value="480"/>
+        <arg name="depth_fps"               value="15"/>
+    </include>
+    
+
+    <!-- Depth Image to Laser Scan Node -->
+    <node name="depthimage_to_laserscan" pkg="depthimage_to_laserscan" type="depthimage_to_laserscan" args="">
+
+        <remap from="image"       to="/$(arg robot_name)/d455_camera/camera/depth/image_rect_raw"/> 
+
+        <remap from="camera_info" to="/$(arg robot_name)/d455_camera/camera/depth/camera_info"/> 
+        <param name="scan_height"     type="int"    value="70"/>
+        <param name="scan_time"       type="double" value="0.066"/> 
+        <param name="range_min"       type="double" value="0.05"/> 
+        <param name="range_max"       type="double" value="2.0"/> 
+        <param name="output_frame_id" type="str"    value="$(arg robot_name)/d455_camera/camera_depth_frame"/> 
+        <remap from="scan"            to="/$(arg robot_name)/depth/scan"/> 
+    </node>
+    
+
+    <!-- Complementary Filter IMU -->
+    <node pkg="imu_complementary_filter" type="complementary_filter_node" name="complementary_filter_gain_node" output="$(arg output)">
+        <param name="do_bias_estimation" value="false"/>
+        <param name="do_adaptive_gain" value="true"/>
+        <param name="use_mag" value="false"/>
+        <param name="gain_acc" value="0.01"/>
+        <param name="gain_mag" value="0.01"/>
+        <param name="publish_tf" value="false"/>
+        <param name="fixed_frame" value="$(arg robot_name)/odom"/>
+        <param name="publish_debug_topics" value="true"/>
+        <remap from="/$(arg robot_name)/imu/data_raw"  to="/$(arg robot_name)/d455_camera/camera/imu"/>
+        <remap from="/$(arg robot_name)/imu/data"      to="/$(arg robot_name)/imu/data"/>
+    </node>
+
+
+    <!-- Gamepad Joystick -->
+    <include file="$(find leo_robot)/launch/bringup/gamepad.launch">
+        <arg name="output"               value="$(arg output)"/>
+        <arg name="enable_goal_cancel"   value="true"/>
+        <arg name="autorepeat_rate"      value="20" />
+        <arg name="dev_name"             value="PS(R) Gamepad" />
+        <arg name="dev"                  value="/dev/input/js0" />
+        <arg name="dev_ff"               value="dev/input/event13" />
+    </include>
+
+
+    <!-- EKF Robot Localization -->
+    <node pkg="robot_localization" type="ekf_localization_node" name="ekf_se" clear_params="true" output="$(arg output)">
+        <rosparam command="load" file="$(find leo_robot)/config/slam/ekf_localization_config.yaml" />
+    
+        <param name="odom_frame" value="$(arg robot_name)/$(arg odom_frame)"/>
+        <param name="base_link_frame" value="$(arg robot_name)/$(arg base_frame)"/>
+        <param name="world_frame" value="$(arg robot_name)/$(arg odom_frame)"/>
+
+        <param name="odom0" value="/$(arg robot_name)/encoder/odometry"/> 
+        <param name="odom0_queue_size" value="2"/>
+
+        <param name="imu0" value="/$(arg robot_name)/imu/data"/> 
+        <param name="imu0_queue_size" value="1"/>
+
+        <remap from="/$(arg robot_name)/odometry/filtered" to="/$(arg robot_name)/odometry"/>
+        <remap from="/$(arg robot_name)/accel/filtered"    to="/$(arg robot_name)/accel"/>
+        <param name="publish_tf"  value="true"/>
+    </node>
+
+    <!--Robot Status-->
+    <node pkg="leo_robot" name="robot_status"  type="robot_status.py" output="$(arg output)"  required='true'/>
+
+    <!-- Multimaster -->
+    <!-- Multimaster Discovery -->
+    <!-- <node name="master_discovery" pkg="fkie_master_discovery" type="master_discovery" output="$(arg output)">
+        <rosparam command="load" file="$(find leo_robot)/config/bringup/master_disc_config.yaml"/>
+    </node> -->
+
+    <!-- Multimaster Sync -->
+    <!-- <node name="master_sync" pkg="fkie_master_sync" type="master_sync" output="$(arg output)">
+        <rosparam command="load" file="$(find leo_robot)/config/bringup/master_sync_config.yaml"/>
+    </node> -->
+    
+    
+    <!-- Rosbridge Websocket -->
+    <node name="rosbridge_websocket" pkg="rosbridge_server" type="rosbridge_websocket" output="$(arg output)">
+        <rosparam command="load" file="$(find leo_robot)/config/bringup/rosbridge_ws_config.yaml"/>
+        <param name="port" value="$(arg ws_port)"/>
+        <param name="address" value="$(env HOSTNAME)"/>
+        <rosparam command="load" file="$(find leo_robot)/config/bringup/rosbridge_glob_config.yaml"/>
+    </node>
+
+    <node name="rosapi" pkg="rosapi" type="rosapi_node" output="$(arg output)">
+        <rosparam command="load" file="$(find leo_robot)/config/bringup/rosbridge_glob_config.yaml"/>
+    </node>
+
+    <!-- TF Web republisher -->
+    <!-- <node name="tf2_web_republisher" pkg="tf2_web_republisher" type="tf2_web_republisher" output="$(arg output)"/> -->
+
+
+</launch>
+

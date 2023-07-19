@@ -1,0 +1,237 @@
+robot_base_frame: leo_bot/base_footprint
+publish_voxel_map: true
+navigation_map:
+   map_topic: /leo_bot/map
+
+obstacles:
+  origin_z: 0.0
+  z_resolution: 0.2
+  z_voxels: 2
+  mark_threshold: 0
+  publish_voxel_map: false
+  footprint_clearing_enabled: true
+
+  observation_sources: scan_marking scan_clearing #depth_scan_marking depth_scan_clearing
+  scan_marking:
+    {sensor_frame: leo_bot/laser, 
+    data_type: LaserScan, 
+    topic: /leo_bot/scan, 
+    marking: true, 
+    clearing: false, 
+    expected_update_rate: 0.0, 
+    observation_persistence: 0.0, 
+    min_obstacle_height: 0.20, 
+    max_obstacle_height: 0.25, 
+    obstacle_range: 5.0,
+    raytrace_range: 6.5,
+    inf_is_valid: true,
+    track_unknown_space: true}
+  scan_clearing:
+    {sensor_frame: leo_bot/laser, 
+    data_type: LaserScan, 
+    topic: /leo_bot/scan, 
+    marking: false, 
+    clearing: true, 
+    expected_update_rate: 0.0, 
+    observation_persistence: 0.0, 
+    min_obstacle_height: 0.20, 
+    max_obstacle_height: 0.25, 
+    obstacle_range: 5.0,
+    raytrace_range: 6.5,
+    inf_is_valid: true,
+    track_unknown_space: true}
+  depth_scan_marking: {
+    sensor_frame: leo_bot/d455_camera/camera_depth_frame, 
+    data_type: LaserScan, 
+    topic: /leo_bot/depth/scan, 
+    marking: true, 
+    clearing: true, 
+    expected_update_rate: 0.0, 
+    observation_persistence: 0.5, 
+    min_obstacle_height: 0.0, 
+    max_obstacle_height: 2.0,
+    obstacle_range: 1.5,
+    raytrace_range: 5.5,
+    inf_is_valid: true,
+    track_unknown_space: true}
+    
+  depth_scan_clearing:
+    {sensor_frame: leo_bot/d455_camera/camera_depth_frame, 
+    data_type: LaserScan, 
+    topic: /leo_bot/depth/scan, 
+    marking: true, 
+    clearing: true, 
+    expected_update_rate: 0.0, 
+    observation_persistence: 0.5, 
+    min_obstacle_height: 0.0, 
+    max_obstacle_height: 2.0, 
+    obstacle_range: 1.5,
+    raytrace_range: 5.5,
+    inf_is_valid: true,
+    track_unknown_space: true}
+
+
+voxel:
+
+  origin_z: 0.0
+  z_resolution: 0.2
+  z_voxels: 2
+  mark_threshold: 0
+  publish_voxel_map: false
+  footprint_clearing_enabled: true
+
+  # observation_sources: scan_marking scan_clearing  depth_scan_marking depth_scan_clearing
+  # scan_marking:
+  #   {sensor_frame: leo_bot/laser, 
+  #   data_type: LaserScan, 
+  #   topic: /leo_bot/scan, 
+  #   marking: true, 
+  #   clearing: false, 
+  #   expected_update_rate: 0.0, 
+  #   observation_persistence: 0.0, 
+  #   min_obstacle_height: 0.20, 
+  #   max_obstacle_height: 0.25, 
+  #   obstacle_range: 5.0,
+  #   raytrace_range: 6.5,
+  #   inf_is_valid: true,
+  #   track_unknown_space: true}
+  # scan_clearing:
+  #   {sensor_frame: leo_bot/laser, 
+  #   data_type: LaserScan, 
+  #   topic: /leo_bot/scan, 
+  #   marking: false, 
+  #   clearing: true, 
+  #   expected_update_rate: 0.0, 
+  #   observation_persistence: 0.0, 
+  #   min_obstacle_height: 0.20, 
+  #   max_obstacle_height: 0.25, 
+  #   obstacle_range: 5.0,
+  #   raytrace_range: 6.5,
+  #   inf_is_valid: true,
+  #   track_unknown_space: true}
+
+  # depth_scan_marking: {
+  #   sensor_frame: leo_bot/d455_camera/camera_depth_frame, 
+  #   data_type: LaserScan, 
+  #   topic: /leo_bot/depth/scan, 
+  #   marking: true, 
+  #   clearing: true, 
+  #   expected_update_rate: 0.0, 
+  #   observation_persistence: 0.5, 
+  #   min_obstacle_height: 0.0, 
+  #   max_obstacle_height: 2.0,
+  #   obstacle_range: 1.5,
+  #   raytrace_range: 5.5,
+  #   inf_is_valid: true,
+  #   track_unknown_space: true}
+    
+  # depth_scan_clearing:
+  #   {sensor_frame: leo_bot/d455_camera/camera_depth_frame, 
+  #   data_type: LaserScan, 
+  #   topic: /leo_bot/depth/scan, 
+  #   marking: true, 
+  #   clearing: true, 
+  #   expected_update_rate: 0.0, 
+  #   observation_persistence: 0.5, 
+  #   min_obstacle_height: 0.0, 
+  #   max_obstacle_height: 2.0, 
+  #   obstacle_range: 1.5,
+  #   raytrace_range: 5.5,
+  #   inf_is_valid: true,
+  #   track_unknown_space: true}
+  
+  observation_sources: b_scan_marking b_scan_clearing f_scan_marking f_scan_clearing depth_scan_marking depth_scan_clearing
+
+  b_scan_marking: {
+    sensor_frame: leo_bot/back_lidar, 
+    data_type: LaserScan, 
+    topic: /leo_bot/back_lidar/scan_filtered, 
+    marking: true, 
+    clearing: false, 
+    expected_update_rate: 0.0, 
+    observation_persistence: 0.0, 
+    min_obstacle_height: 0.20, 
+    max_obstacle_height: 0.25, 
+    obstacle_range: 5.0,
+    raytrace_range: 6.5,
+    inf_is_valid: true,
+    track_unknown_space: true}
+    
+  b_scan_clearing:
+    {sensor_frame: leo_bot/back_lidar, 
+    data_type: LaserScan, 
+    topic: /leo_bot/back_lidar/scan_filtered, 
+    marking: false, 
+    clearing: true, 
+    expected_update_rate: 0.0, 
+    observation_persistence: 0.0, 
+    min_obstacle_height: 0.20, 
+    max_obstacle_height: 0.25,  
+    obstacle_range: 5.0,
+    raytrace_range: 6.5,
+    inf_is_valid: true,
+    track_unknown_space: true}
+  f_scan_marking:
+    {sensor_frame: leo_bot/front_lidar, 
+    data_type: LaserScan, 
+    topic: /leo_bot/front_lidar/scan_filtered, 
+    marking: true, 
+    clearing: false, 
+    expected_update_rate: 0.0, 
+    observation_persistence: 0.0, 
+    min_obstacle_height: 0.20, 
+    max_obstacle_height: 0.25, 
+    obstacle_range: 5.0,
+    raytrace_range: 6.5,
+    inf_is_valid: true,
+    track_unknown_space: true}
+  f_scan_clearing:
+    {sensor_frame: leo_bot/front_lidar, 
+    data_type: LaserScan, 
+    topic: /leo_bot/front_lidar/scan_filtered, 
+    marking: false, 
+    clearing: true, 
+    expected_update_rate: 0.0, 
+    observation_persistence: 0.0, 
+    min_obstacle_height: 0.20, 
+    max_obstacle_height: 0.25, 
+    obstacle_range: 5.0,
+    raytrace_range: 6.5,
+    inf_is_valid: true,
+    track_unknown_space: true}
+  
+  depth_scan_marking: {
+    sensor_frame: leo_bot/d455_camera/camera_depth_frame, 
+    data_type: LaserScan, 
+    topic: /leo_bot/depth/scan, 
+    marking: true, 
+    clearing: true, 
+    expected_update_rate: 0.0, 
+    observation_persistence: 0.5, 
+    min_obstacle_height: 0.0, 
+    max_obstacle_height: 2.0,
+    obstacle_range: 1.5,
+    raytrace_range: 5.5,
+    inf_is_valid: true,
+    track_unknown_space: true}
+    
+  depth_scan_clearing:
+    {sensor_frame: leo_bot/d455_camera/camera_depth_frame, 
+    data_type: LaserScan, 
+    topic: /leo_bot/depth/scan, 
+    marking: true, 
+    clearing: true, 
+    expected_update_rate: 0.0, 
+    observation_persistence: 0.5, 
+    min_obstacle_height: 0.0, 
+    max_obstacle_height: 2.0, 
+    obstacle_range: 1.5,
+    raytrace_range: 5.5,
+    inf_is_valid: true,
+    track_unknown_space: true}
+
+
+virtual_walls_map:
+  map_topic: /leo_bot/virtual_map
+  use_maximum: true
+  first_map_only: true

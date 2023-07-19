@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="robot_name"              default="$(env ROBOT_NAME)" />
+    <arg name="base_frame"              default="base_link" />
+    <arg name="output"                  default="screen" />
+
+    <arg name="razor_config_file" value="$(find leo_robot)/config/bringup/razor_imu_config.yaml"/>
+    <node pkg="razor_imu_9dof" type="imu_node.py" name="imu_node" output="$(arg output)">
+        <rosparam file="$(arg razor_config_file)" command="load"/>
+        <param name="port"                        value="/dev/ttyRazorIMU" />
+        <param name="frame_id"                    value="$(arg robot_name)/imu" />
+        <remap from="/$(arg robot_name)/imu" to="/$(arg robot_name)/imu/data_raw"/>
+    </node>
+    
+    <!-- <node pkg="imu_complementary_filter" type="complementary_filter_node" name="complementary_filter_gain_node" output="$(arg output)">
+        <param name="do_bias_estimation" value="false"/>
+        <param name="do_adaptive_gain" value="true"/>
+        <param name="use_mag" value="false"/>
+        <param name="gain_acc" value="0.5"/>
+        <param name="gain_mag" value="0.5"/>
+        <param name="publish_tf" value="false"/>
+        <param name="fixed_frame" value="$(arg robot_name)/odom"/>
+    </node> -->
+
+
+</launch>

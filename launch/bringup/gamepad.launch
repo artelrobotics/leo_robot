@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="output"               default="screen"/>
+    <arg name="enable_goal_cancel"   default="false"/>
+    <arg name="autorepeat_rate"      default="10" />
+    <arg name="dev_name"             default="PS(R) Gamepad" />
+    <arg name="dev"                  default="/dev/input/js0" />
+    <arg name="dev_ff"               default="dev/input/event13" />
+
+    <node pkg="joy" type="joy_node" name="gamepad_joy" output="$(arg output)" >
+        <param name="dev_name"        value="$(arg dev_name)" />
+        <param name="dev"             value="$(arg dev)" />
+        <param name="autorepeat_rate" value="$(arg autorepeat_rate)" />
+    </node>
+
+    <node pkg="arobotics_joystick" type="joy_to_robot.py" name="gamepad" output="$(arg output)" >
+        <rosparam command="load" file="$(find leo_robot)/config/bringup/gamepad.yaml" />
+        <param name="enable_goal_cancel"   value="$(arg enable_goal_cancel)"/>
+    </node>
+</launch>

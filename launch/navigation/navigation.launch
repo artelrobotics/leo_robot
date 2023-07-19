@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+
+<launch>
+    <!-- ****************** Arguments ******************** -->
+    <arg name="robot_name"            default="$(env ROBOT_NAME)" />
+    <arg name="base_frame"            default="base_footprint" />
+    <arg name="output"                default="log" />
+    <arg name="local_planner_type"    default="teb"   doc="[base, dwa, teb]"/>
+    <arg name="with_virtual_walls"    default="true" doc="Enables usage of virtual walls when set. Set to false when running SLAM." />
+    <arg name="map_name"              default="leo_office_11_02"/>
+    <arg name="global_planner"        default="false" />
+
+    <!-- ************************ Map Server ************************* -->
+    <include file="$(find leo_robot)/launch/navigation/map_server.launch">
+        <arg name="robot_name"            value="$(arg robot_name)" />
+        <arg name="output"                value="$(arg output)" />
+        <arg name="with_virtual_walls"    value="$(arg with_virtual_walls)"/>
+        <arg name="map_name"              value="$(arg map_name)"/>
+ 
+    </include>
+
+
+    <!-- ********************* AMCL ************************* -->
+    <include file="$(find leo_robot)/launch/navigation/amcl.launch">
+        <arg name="robot_name"            value="$(arg robot_name)" />
+        <arg name="base_frame"            value="$(arg base_frame)" />
+        <arg name="output"                value="$(arg output)" />
+        <arg name="gui_publish_rate"      value="5.0" />
+    </include>
+
+
+    <!-- ********************* Scripts ************************* -->
+    <!-- <node pkg="leo_robot" name="initial_pose_saver" type="amcl_initial_pose_save.py"  output="$(arg output)"  required='true'/> -->
+    <node pkg="leo_robot" name="goal_saver"         type="goal_pose_saver_service.py" output="$(arg output)"  required='true'/>
+
+
+    <!-- ********************* Move Base ************************* -->
+    <include file="$(find leo_robot)/launch/navigation/move_base.launch">
+        <arg name="robot_name"            value="$(arg robot_name)" />
+        <arg name="base_frame"            value="$(arg base_frame)" />
+        <arg name="output"                value="$(arg output)" />
+        <arg name="local_planner_type"    value="$(arg local_planner_type)"/>
+        <arg name="with_virtual_walls"    value="$(arg with_virtual_walls)"/>
+        <arg name="global_planner"        value="$(arg global_planner)" />
+    </include>   
+
+    <!-- ********************* TF to Pose ************************* -->
+    <node pkg="leo_robot" type="tf_to_pose.py" name="tf_to_pose" output="$(arg output)" >
+        <param name="rate"          value="10" />
+        <param name="child_frame"   value="$(arg robot_name)/$(arg base_frame)" />
+        <param name="parrent_frame" value="$(arg robot_name)/map" />
+    </node>
+   
+    
+</launch>

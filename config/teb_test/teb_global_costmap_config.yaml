@@ -1,0 +1,20 @@
+global_costmap:
+    transform_tolerance: 1.0
+    update_frequency: 1.0
+    publish_frequency: 1.0
+    global_frame: leo_bot/map
+    resolution: 0.1
+    rolling_window: false
+    #footprint: [[-0.2875,-0.2875],[-0.2875,0.2875],[0.2875,0.2875],[0.2875,-0.2875]]
+    footprint: [[-0.1575,-0.2875],[-0.1575,0.2875],[0.4375,0.2875],[0.4375,-0.2875]]
+    footprint_padding: 0.0
+    inflation:
+      cost_scaling_factor: 2.4  # Exponential rate at which the obstacle cost drops off (default: 10). Must be chosen so that the cost value is > 0 at robot's circumscribed radius.
+      inflation_radius: 0.8   # Max. distance from an obstacle at which costs are incurred for planning paths. Must be > robot's circumscribed radius.
+
+    plugins:
+        - {name: navigation_map, type: "costmap_2d::StaticLayer" }
+        - {name: obstacles,  type: "costmap_2d::VoxelLayer" }
+        - {name: inflation,  type: "costmap_2d::InflationLayer" }
+        
+      

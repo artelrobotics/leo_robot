@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<launch>
+    <arg name="robot_name"              default="$(env ROBOT_NAME)" />
+    <arg name="base_frame"              default="base_link" />
+    <arg name="output"                  default="screen" />
+    <arg name="marker_size"             default="11.8" />
+	<arg name="max_new_marker_error"    default="0.02" />
+	<arg name="max_track_error"         default="0.1" />
+	<arg name="cam_image_topic_front"   default="/$(arg robot_name)/d455_camera/camera/color/image_raw" />
+	<arg name="cam_info_topic_front"    default="/$(arg robot_name)/d455_camera/camera/color/camera_info" />
+	<arg name="output_frame"            default="$(arg robot_name)/d455_camera/camera_color_optical_frame" />
+
+
+    <node name="ar_tag_detector" pkg="ar_track_alvar" type="individualMarkersNoKinect" respawn="true" output="$(arg output)">
+        <param name="marker_size"           type="double" value="$(arg marker_size)" />
+        <param name="max_new_marker_error"  type="double" value="$(arg max_new_marker_error)" />
+        <param name="max_track_error"       type="double" value="$(arg max_track_error)" />
+        <param name="output_frame"          type="string" value="$(arg output_frame)" />
+        <remap from="camera_image"          to="$(arg cam_image_topic_front)" />
+        <remap from="camera_info"           to="$(arg cam_info_topic_front)" />
+
+    </node>
+
+</launch>

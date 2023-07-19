@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="robot_name"            default="$(env ROBOT_NAME)"/>
+    <arg name="base_frame"            default="base_link"/>
+    <arg name="odom_frame"            default="odom"/>
+    <arg name="output"                default="screen"/>
+    <arg name="publish_tf"            default="false" /> 
+    <!-- bms -->
+    <node pkg="daly_bms" type="daly_bms_node.py" name="daly_bms" output="$(arg output)"  required='true'>
+	    <param name="serial_port" value="/dev/ttyDalyBMS"/>
+    </node>
+
+    <!-- Odrive drivers -->
+    <node name="driver"  pkg="odrive_driver" type="driver.py" output="$(arg output)" required='true'>
+        <rosparam command="load" file="$(find leo_robot)/config/bringup/motor_driver_config.yaml" />
+    </node>
+
+    <!-- Odometry from encoder -->
+    <node name="encoder"  pkg="odrive_driver" type="odom_differential.py" output="$(arg output)" required='true'>
+        <rosparam command="load" file="$(find leo_robot)/config/bringup/odom_encoder_config.yaml" />
+        <param name="base_frame"            value="$(arg robot_name)/$(arg base_frame)"/>
+        <param name="odom_frame"            value="$(arg robot_name)/$(arg odom_frame)"/>
+        <param name="odom_topic"            value="/$(arg robot_name)/encoder/odometry"/>
+        <param name="publish_tf"            value="$(arg publish_tf)" /> 
+    </node>
+
+
+</launch>
