@@ -6,7 +6,7 @@
     <arg name="odom_frame"            default="odom"/>
     <arg name="output"                default="screen" />
     <arg name="ws_port"               default="9090"/>
-    <arg name="ar_marker_size"        default="11.8" />
+
     
     <!-- Robot Description -->
     <param name="use_gui" value="false" />
@@ -59,11 +59,24 @@
     </include>
     
     <!-- AR tag detector -->
-     <include file="$(find leo_robot)/launch/bringup/ar_tag.launch">
+    <!-- <include file="$(find leo_robot)/launch/bringup/ar_tag.launch">
         <arg name="robot_name"              value="$(arg robot_name)" />
         <arg name="base_frame"              value="$(arg base_frame)" />
         <arg name="output"                  value="$(arg output)" />
         <arg name="marker_size"             value="$(arg ar_marker_size)" />
+    </include> -->
+
+    <!-- Aruco detector -->
+    <include file="$(find leo_robot)/launch/bringup/aruco_detect.launch">
+        <arg name="robot_name"              value="$(arg robot_name)" />
+        <arg name="transport"               value="compressed"/>
+        <arg name="fiducial_len"            value="0.14"/>
+        <arg name="dictionary"              value="0"/>
+        <arg name="do_pose_estimation"      value="true"/>
+        <arg name="vis_msgs"                value="false"/>
+        <arg name="ignore_fiducials"        value="" />
+        <arg name="fiducial_len_override"   value="1: 0.10, 2: 0.04" />
+        <arg name="verbose"                 value="false"/>
     </include>
 
     <!-- Depth Image to Laser Scan Node -->
@@ -129,14 +142,16 @@
 
     <!-- Docking -->
     <include file="$(find leo_robot)/launch/bringup/docking.launch">
-        <arg name="robot_name"              value="$(env ROBOT_NAME)" />
-        <arg name="base_frame"              value="base_link" />
-        <arg name="output"                  value="screen" />
-        <arg name="odom_frame"              value="odom"/>
-        <arg name="marker_frame"            value="ar_marker_1"/>
-        <arg name="interval"                value="0.05"/>
-        <arg name="transform_tolerance"     value="0.5"/>
-        <arg name="freq"                    value="10.0"/>
+        <arg name="robot_name"                  value="$(env ROBOT_NAME)" />
+        <arg name="base_frame"                  value="base_link" />
+        <arg name="output"                      value="screen" />
+        <arg name="odom_frame"                  value="odom"/>
+        <arg name="marker_frame"                value="fiducial_1"/>
+        <arg name="marker_frame_small"          value="fiducial_2"/>
+        <arg name="interval"                    value="0.05"/>
+        <arg name="transform_tolerance"         value="0.5"/>
+        <arg name="transform_tolerance_small"   value="1.0"/>
+        <arg name="freq"                        value="10.0"/>
     </include>
 
     <!--Robot Status-->

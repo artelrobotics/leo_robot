@@ -47,7 +47,7 @@ if __name__ == "__main__":
                 result = client.get_result()
                 if result:
                     rospy.loginfo(f'Goal {goal_names[0]} execution done')
-                    if(goal_names[0] == "docking"):
+                    if(goal_names[0] == "pre_point"):
                         dock = DockingGoal()
                         dock.aruco_id = 1
                         dock.type = "docking"
