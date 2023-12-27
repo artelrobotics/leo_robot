@@ -30,7 +30,6 @@ if __name__ == "__main__":
     client.wait_for_server()
     client_dock.wait_for_server()
     
-    
     while True:
         try:
             ac_goal = MoveBaseGoal()

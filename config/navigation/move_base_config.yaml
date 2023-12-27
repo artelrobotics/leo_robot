@@ -3,7 +3,7 @@ clearing_rotation_allowed: false
 controller_frequency: 3.0   # run controller at 5.0 Hz
 controller_patience: 5.0    # if the controller failed, clear obstacles and retry; after 15.0 s, abort and replan
 planner_frequency: 1.0       #0.0 don't continually replan (only when controller failed)
-planner_patience: 15.0        # if the first planning attempt failed, abort planning retries after 5.0 s...
+planner_patience: 5.0        # if the first planning attempt failed, abort planning retries after 5.0 s...
 max_planning_retries: -1      # need to check with -1 value , infinite retrice# ... or after 10 attempts (whichever happens first)
 oscillation_timeout: 30      # abort controller and trigger recovery behaviors after 30.0 s
 oscillation_distance: 0.5
@@ -13,7 +13,11 @@ recovery_behavior_enabled: true
 recovery_behaviors: [{name: conservative_reset, type: clear_costmap_recovery/ClearCostmapRecovery}, 
 {name: aggressive_reset, type: clear_costmap_recovery/ClearCostmapRecovery},
 {name: total_reset, type: costmap_total_recovery/CostmapTotalRecovery},
-{name: wait_reset, type: costmap_wait_clear_recovery/CostmapWaitClearRecovery}]
+{name: move_back, type: move_back_recovery/MoveBackClearRecovery}]
+# ,
+# {name: move_back, type: move_back_recovery/MoveBackClearRecovery}
+# {name: wait_reset, type: costmap_wait_clear_recovery/CostmapWaitClearRecovery},
+#{name: move_back, type: move_back_recovery/MoveBackClearRecovery}]
 
 conservative_reset:
   reset_distance: 0.5 
@@ -29,3 +33,9 @@ aggressive_reset:
 
 wait_reset:
   wait_duration: 10.0
+
+move_back:
+  distance_backwards: 0.25
+  frequency: 20.0
+  lethal_cost: 250
+  linear_vel_x: 0.1

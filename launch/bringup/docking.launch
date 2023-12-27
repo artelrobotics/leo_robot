@@ -27,6 +27,8 @@
         <param name="transform_tolerance" value="$(arg transform_tolerance_small)"/>
         <param name="freq"                value="$(arg freq)"/>
     </node>
-     <node name="docking_as"  pkg="docking_server" type="docking_as.py" output="$(arg output)" required='true'> </node>
+    
+    <node name="docking_as"  pkg="docking_server" type="docking_as.py" output="$(arg output)" required='true'> </node>
+    
 
 </launch>

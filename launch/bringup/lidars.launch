@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
     <arg name="robot_name"              default="$(env ROBOT_NAME)" />
-    <arg name="base_frame"              default="base_link" />
+    <arg name="base_frame"              default="base_footprint" />
     <arg name="output"                  default="screen" />
     <arg name="pub_joints"              default="false" />
     <arg name="front_lidar_frame"       default="leo_bot/front_lidar" />

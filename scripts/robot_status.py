@@ -31,7 +31,6 @@ class Robot:
             or msg.right_sensorless_estimator_error > 0 or msg.right_encoder_error > 0 or msg.right_controller_error > 0 or msg.left_axis_error > 0
             or msg.left_motor_error > 0 or msg.left_sensorless_estimator_error > 0 or msg.left_controller_error > 0):
    
-            
             self.robot_status.driver_status = "Driver has error"
         else:
             self.robot_status.driver_status = "Driver is properly working"
@@ -43,7 +42,7 @@ class Robot:
         self.robot_status_pub.publish(self.robot_status)
 
 if __name__ == "__main__":
-    rospy.init_node("Robot_status")
+    rospy.init_node("robot_status")
     r = rospy.Rate(20)
     status = Robot()
     while not rospy.is_shutdown():

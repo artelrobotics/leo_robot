@@ -17,13 +17,33 @@
         <param name="first_map_only" value="true"/>
         <param name="tf_broadcast" value="true"/>
     
-        <param name="initial_cov_xx" value="0.25" />
-        <param name="initial_cov_yy" value="0.25" />
-        <param name="initial_cov_aa" value="0.068" />
-        <param name="initial_pose_x" value="22.665708456138095" />
-        <param name="initial_pose_y" value="-33.66597004589267" />
-        <param name="initial_pose_a" value="0.20645317800245366" />
-        
+        <param name="initial_cov_xx" value="0.24278913053989015" />
+        <param name="initial_cov_yy" value="0.24259989395034498" />
+        <param name="initial_cov_aa" value="0.0650658130276735" />
+        <param name="initial_pose_x" value="-8.065282749033946" />
+        <param name="initial_pose_y" value="0.37984209874683633" />
+        <param name="initial_pose_a" value="-0.6427092977146723" />
+
+        <!-- <param name="initial_cov_xx" value="0.0018985060089144383" />
+        <param name="initial_cov_yy" value="0.001923474488618293" />
+        <param name="initial_cov_aa" value="0.0015270140188449867" />
+        <param name="initial_pose_x" value="0.045338025084146416" />
+        <param name="initial_pose_y" value="1.0412823626320105" />
+        <param name="initial_pose_a" value="0.01953112627741272" /> -->
+
+        <!-- <param name="initial_cov_xx" value="0.0018415420343025346" />
+        <param name="initial_cov_yy" value="0.0022896819177560257" />
+        <param name="initial_cov_aa" value="0.0028981797485869974" />
+        <param name="initial_pose_x" value="-5.061254663547058" />
+        <param name="initial_pose_y" value="-0.6153396339888759" />
+        <param name="initial_pose_a" value="-0.03228037485998501" />
+         -->
+        <!-- <param name="initial_cov_xx" value="0.003331837481003852" />
+        <param name="initial_cov_yy" value="0.003267908361100247" />
+        <param name="initial_cov_aa" value="0.003647550699637466" />
+        <param name="initial_pose_x" value="1.5039816812104185" />
+        <param name="initial_pose_y" value="2.17038626221865" />
+        <param name="initial_pose_a" value="-3.085284075384399" /> -->
 
         <param name="gui_publish_rate" value="$(arg gui_publish_rate)"/>
 

@@ -7,8 +7,8 @@
     <arg name="output"                default="log" />
     <arg name="local_planner_type"    default="teb"   doc="[base, dwa, teb]"/>
     <arg name="with_virtual_walls"    default="true" doc="Enables usage of virtual walls when set. Set to false when running SLAM." />
-    <arg name="map_name"              default="leo_office_11_02"/>
-    <arg name="global_planner"        default="false" />
+    <arg name="map_name"              default="uchebniy_1"/>
+    <arg name="global_planner"        default="true" />
 
     <!-- ************************ Map Server ************************* -->
     <include file="$(find leo_robot)/launch/navigation/map_server.launch">

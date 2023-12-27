@@ -46,6 +46,25 @@
         <arg name="back_lidar_frame"        value="leo_bot/back_lidar" />
     </include>
 
+    <!-- Line extractor -->
+    <!-- <node name="line_extractor" pkg="laser_line_extraction" type="line_extraction_node">
+        <param name="~frequency" value="13.0" />
+        <param name="~frame_id" value="$(arg robot_name)/laser" />
+        <param name="~scan_topic" value="/$(arg robot_name)/scan" />
+        <param name="~publish_markers" value="true" />
+        <param name="~bearing_std_dev" value="1e-5" />
+        <param name="~range_std_dev" value="0.012" />
+        <param name="~least_sq_angle_thresh" value="0.0001" />
+        <param name="~least_sq_radius_thresh" value="0.0001" />
+        <param name="~max_line_gap" value="0.1" />
+        <param name="~min_line_length" value="0.2" />
+        <param name="~min_range" value="0.001" />
+        <param name="~max_range" value="0.4" />
+        <param name="~min_split_dist" value="0.01" />
+        <param name="~outlier_dist" value="0.02" />
+        <param name="~min_line_points" value="20" />
+    </node> -->
+
     <!-- Intel Realsense D455 camera -->
     <include file="$(find leo_robot)/launch/bringup/d455_camera.launch">
         <arg name="robot_name"              value="$(arg robot_name)" />
@@ -75,7 +94,7 @@
         <arg name="do_pose_estimation"      value="true"/>
         <arg name="vis_msgs"                value="false"/>
         <arg name="ignore_fiducials"        value="" />
-        <arg name="fiducial_len_override"   value="1: 0.10, 2: 0.04" />
+        <arg name="fiducial_len_override"   value="1: 0.10, 2: 0.025" />
         <arg name="verbose"                 value="false"/>
     </include>
 
@@ -85,7 +104,7 @@
         <remap from="image"       to="/$(arg robot_name)/d455_camera/camera/depth/image_rect_raw"/> 
 
         <remap from="camera_info" to="/$(arg robot_name)/d455_camera/camera/depth/camera_info"/> 
-        <param name="scan_height"     type="int"    value="70"/>
+        <param name="scan_height"     type="int"    value="50"/>
         <param name="scan_time"       type="double" value="0.066"/> 
         <param name="range_min"       type="double" value="0.05"/> 
         <param name="range_max"       type="double" value="2.0"/> 
